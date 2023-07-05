@@ -65,10 +65,4 @@ class Migration(migrations.Migration):
             name='id_paciente',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='modelos.paciente'),
         ),
-        
-        migrations.AddField(
-            model_name='atendimento',
-            name='id_paciente',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='modelos.paciente'),
-        ),
     ]

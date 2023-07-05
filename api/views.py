@@ -7,12 +7,12 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
 # viewset de paciente
-class pacienteViewSet(viewsets.ModelViewSet):
+class PacienteViewSet(viewsets.ModelViewSet):
     queryset = Paciente.objects.all()
     serializer_class = PacienteSerializer
 
 # viewset de atendimento
-class atendimentoViewSet(viewsets.ModelViewSet):
+class AtendimentoViewSet(viewsets.ModelViewSet):
     queryset = Atendimento.objects.all()
     serializer_class = AtendimentoSerializer
 
@@ -25,7 +25,7 @@ class atendimentoViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 # viewset de notificacao
-class notificacaoViewSet(viewsets.ModelViewSet):
+class NotificacaoViewSet(viewsets.ModelViewSet):
     queryset = Notificacao.objects.all()
     serializer_class = NotificacaoSerializer
 
