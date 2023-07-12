@@ -91,7 +91,6 @@ class Atendimento(models.Model):
         return f"{self.paciente}, {self.local}"
     
 class Notificacao(models.Model):
-  notificacao = models.AutoField(primary_key=True)
   data_notificacao = models.DateField()
   tipo_teste = models.CharField(max_length=100) #TODO: fazer como textchoice (dando as opcoes validas)
   estado_teste = models.CharField(max_length=100) #TODO: fazer como textchoice (dando as opcoes validas)

@@ -17,6 +17,13 @@
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.bundle.min.js'%}" ></script>
 
-    
+    {% if lista.count > 0 %}
+        {% for i in lista %}
+            <p>{{i}}</p>
+        {% endfor %}
+        <p> Quantidade de notificações: {{lista.count}}</p>
+    {% else %}
+        <p> Não existe notificações salvas.</p>
+    {% endif %}
 </body>
 </html>
