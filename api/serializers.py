@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from modelos.models import Paciente, Atendimento, Notificacao
+from web.models import Paciente, Atendimento, Notificacao
 
 # class de paciente
 class PacienteSerializer(serializers.ModelSerializer):

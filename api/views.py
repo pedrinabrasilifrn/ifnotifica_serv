@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from modelos.models import Paciente, Atendimento, Notificacao
+from web.models import Paciente, Atendimento, Notificacao
 from api.serializers import *
 from rest_framework.decorators import action
 from rest_framework.response import Response
