@@ -83,12 +83,12 @@ class Paciente(models.Model):
 
 class Atendimento(models.Model):
   estrategia_atendimento = models.CharField(max_length=100)
-  local_atendimento = models.CharField(max_length=100) #TODO: mudar local_atendimento para chave estrangeiro com ubs
+  local = models.CharField(max_length=100) #TODO: mudar local_atendimento para chave estrangeiro com ubs
   paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
   data_cadastro = models.DateField()
   
   def __str__(self) -> str:
-        return f"{self.paciente}, {self.local_atendimento}"
+        return f"{self.paciente}, {self.local}"
     
 class Notificacao(models.Model):
   notificacao = models.AutoField(primary_key=True)
