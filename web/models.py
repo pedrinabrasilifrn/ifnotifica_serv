@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator
+from datetime import date
 
 class Estado(models.TextChoices):
     AC = "AC", "Acre"
@@ -58,14 +60,14 @@ class Resultado(models.TextChoices):
     INDETERMINADO = "INDETERMINADO", "Resultado indeterminado" 
 
 class Cidade(models.Model):
-    descricao = models.CharField(verbose_name="Cidade", blank=False, null=False, max_length=255)
+    descricao = models.CharField(verbose_name="Cidade", blank=False, null=False, max_length=255, validators=[MinLengthValidator(3)])
     estado = models.CharField(verbose_name="Estado", blank=False, null=False, choices= Estado.choices, max_length=255)
 
     def __str__(self):
         return f"{self.descricao}, {self.estado}"
 
 class Bairro(models.Model):
-    descricao = models.CharField(verbose_name="Bairro", blank=False, null=False, max_length=255)
+    descricao = models.CharField(verbose_name="Bairro", blank=False, null=False, max_length=255, validators=[MinLengthValidator(3)])
     cidade = models.ForeignKey(Cidade, on_delete=models.PROTECT)
     
     def __str__(self):
@@ -85,7 +87,7 @@ class Paciente(models.Model):
     cpf = models.CharField(max_length=11, blank=False, null=False)
     cbo = models.CharField(max_length=15, blank=True, null=False)
     nome = models.CharField(max_length=100, blank=False, null=False)
-    data_nascimento = models.DateField()
+    data_nascimento = models.DateField(validators=[MaxValueValidator(date.today)])
     sexo = models.CharField(max_length=10, choices=Sexo.choices)
     cor = models.CharField(max_length=20, choices = Cor.choices)
     tradicionalidade = models.BooleanField(blank=False, null=False)
@@ -97,7 +99,7 @@ class Paciente(models.Model):
     telefone1 = models.CharField(max_length=15, blank=False, null=False)
     telefone2 = models.CharField(max_length=15, blank=False, null=False)
     email = models.EmailField(max_length=100, blank=False, null=False)
-    data_cadastro = models.DateField()
+    data_cadastro = models.DateField(default=date.today)
     
     def __str__(self) -> str:
         return f"{self.cpf}, {self.nome}"
@@ -106,13 +108,13 @@ class Atendimento(models.Model):
     estrategia_atendimento = models.CharField(max_length=100, blank=False, null=False)
     local = models.ForeignKey(UnidadeBasica, on_delete=models.PROTECT)  #TODO: mudar local_atendimento para chave estrangeiro com ubs
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    data_cadastro = models.DateField(blank=False, null=False)
+    data_cadastro = models.DateField(blank=False, null=False, default=date.today)
   
     def __str__(self) -> str:
         return f"{self.paciente}, {self.local}"
     
 class Notificacao(models.Model):
-    data_notificacao = models.DateField()
+    data_notificacao = models.DateField(default=date.today)
     tipo_teste = models.CharField(max_length=100) #TODO: fazer como textchoice (dando as opcoes validas)
     estado_teste = models.CharField(max_length=100) #TODO: fazer como textchoice (dando as opcoes validas)
     resultado = models.CharField(max_length=100) #TODO: fazer como textchoice (dando as opcoes validas)
@@ -120,7 +122,7 @@ class Notificacao(models.Model):
     sintomas = models.CharField(max_length=100)
     condicoes_especiais = models.CharField(max_length=100)
     atendimento = models.ForeignKey(Atendimento, on_delete=models.CASCADE)
-    data_cadastro = models.DateField()
+    data_cadastro = models.DateField(default=date.today)
     data_envio = models.DateField()
 
     def __str__(self) -> str:
