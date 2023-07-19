@@ -43,6 +43,11 @@ class Cor(models.TextChoices):
     INDIGINA = "INDIGINA", "Indígina"
     IGNORADO = "IGNORADO", "Ignorado"
 
+class EstrategiaAtendimento(models.TextChoices):
+    DIAGNOSTICO_SINTOMATICO = "DIAGNOSTICO_SINTOMATICO", "Diagnóstico assistencial"
+    BUSCA_ATIVA_ASSINTOMATICO = "BUSCA_ATIVA_ASSINTOMATICO", "Busca ativa de assintomático"
+    TRIAGEM_POPULACAO_ESPECIFICA = "TRIAGEM_POPULACAO_ESPECIFICA", "Triagem de população específica"
+
 class TipoTeste(models.TextChoices):
     RT_QPCR = "RT-QCPR", "Teste molecular em tempo real - RT-PCR"
     RT_LAMP = "RT-LAMP", "Teste molecular de amplianção isotermica - RT-LAMP"
@@ -74,8 +79,7 @@ class Bairro(models.Model):
         return f"{self.descricao}, {self.cidade}"
 
 class UnidadeBasica(models.Model):
-    #TODO: Criar entidade par ubs, toda ubs tem descricao e cidade
-    descricao = models.CharField(verbose_name="Unidade basica", blank=False, null=False, max_length=128)
+    descricao = models.CharField(verbose_name="Unidade basica", blank=False, null=False, max_length=128, validators=[MinLengthValidator(3)])
     cidade = models.ForeignKey(Cidade, on_delete=models.PROTECT)
 
     def __str__(self):
@@ -84,46 +88,47 @@ class UnidadeBasica(models.Model):
 
 class Paciente(models.Model):
     id_paciente = models.AutoField(primary_key=True)
-    cpf = models.CharField(max_length=11, blank=False, null=False)
-    cbo = models.CharField(max_length=15, blank=True, null=False)
-    nome = models.CharField(max_length=100, blank=False, null=False)
+    cpf = models.CharField(max_length=11, blank=False, null=False, validators=[MinLengthValidator(11)])
+    cbo = models.CharField(max_length=15, blank=True, null=False,  validators=[MinLengthValidator(4)])
+    nome = models.CharField(max_length=128, blank=False, null=False,  validators=[MinLengthValidator(12)])
     data_nascimento = models.DateField(validators=[MaxValueValidator(date.today)])
-    sexo = models.CharField(max_length=10, choices=Sexo.choices)
-    cor = models.CharField(max_length=20, choices = Cor.choices)
-    tradicionalidade = models.BooleanField(blank=False, null=False)
-    cep = models.CharField(max_length=8, blank=False, null=False)
-    logradouro = models.CharField(max_length=100, blank=True, null=False)
-    numero = models.CharField(max_length=10)
-    complemento = models.CharField(max_length=100)
+    sexo = models.CharField(max_length=10, blank=False, null=False, choices=Sexo.choices)
+    cor = models.CharField(max_length=20, blank=False, null=False, choices=Cor.choices)
+    tradicionalidade = models.BooleanField(blank=False, null=False, default=False)
+    cep = models.CharField(max_length=8, blank=False, null=False, validators=[MinLengthValidator(7)])
+    logradouro = models.CharField(max_length=128, blank=True, null=False)
+    numero = models.CharField(max_length=10, blank=True, null=False, validators=[MinLengthValidator(1)])
+    complemento = models.CharField(max_length=128, blank=True, null=False)
+    cidade = models.ForeignKey(Cidade, on_delete=models.PROTECT)
     bairro = models.ForeignKey(Bairro, on_delete=models.PROTECT)
-    telefone1 = models.CharField(max_length=15, blank=False, null=False)
-    telefone2 = models.CharField(max_length=15, blank=False, null=False)
-    email = models.EmailField(max_length=100, blank=False, null=False)
-    data_cadastro = models.DateField(default=date.today)
+    telefone1 = models.CharField(max_length=15, blank=False, null=False, validators=[MinLengthValidator(9)])
+    telefone2 = models.CharField(max_length=15, blank=True, null=False, validators=[MinLengthValidator(9)])
+    email = models.EmailField(max_length=128, blank=False, null=False)
+    data_cadastro = models.DateField(blank=False, null=False, default=date.today, validators=[MaxValueValidator(date.today)])
     
     def __str__(self) -> str:
         return f"{self.cpf}, {self.nome}"
 
 class Atendimento(models.Model):
-    estrategia_atendimento = models.CharField(max_length=100, blank=False, null=False)
-    local = models.ForeignKey(UnidadeBasica, on_delete=models.PROTECT)  #TODO: mudar local_atendimento para chave estrangeiro com ubs
+    estrategia_atendimento = models.CharField(max_length=128, choices=EstrategiaAtendimento.choices)
+    local = models.ForeignKey(UnidadeBasica, on_delete=models.PROTECT)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    data_cadastro = models.DateField(blank=False, null=False, default=date.today)
+    data_cadastro = models.DateField(blank=False, null=False, default=date.today, validators=[MaxValueValidator(date.today)])
   
     def __str__(self) -> str:
         return f"{self.paciente}, {self.local}"
     
 class Notificacao(models.Model):
     data_notificacao = models.DateField(default=date.today)
-    tipo_teste = models.CharField(max_length=100) #TODO: fazer como textchoice (dando as opcoes validas)
-    estado_teste = models.CharField(max_length=100) #TODO: fazer como textchoice (dando as opcoes validas)
-    resultado = models.CharField(max_length=100) #TODO: fazer como textchoice (dando as opcoes validas)
-    assintomatico = models.BooleanField()
-    sintomas = models.CharField(max_length=100)
-    condicoes_especiais = models.CharField(max_length=100)
+    tipo_teste = models.CharField(max_length=128, blank=False, null=False, choices=TipoTeste.choices) 
+    estado_teste = models.CharField(max_length=128, blank=False, null=False, choices=EstadoTeste.choices) 
+    resultado = models.CharField(max_length=128, blank=False, null=False, choices=Resultado.choices) 
+    assintomatico = models.BooleanField(default=False)
+    sintomas = models.CharField(max_length=256)
+    condicoes_especiais = models.CharField(max_length=256)
     atendimento = models.ForeignKey(Atendimento, on_delete=models.CASCADE)
-    data_cadastro = models.DateField(default=date.today)
-    data_envio = models.DateField()
+    data_cadastro = models.DateField(default=date.today, validators=[MaxValueValidator(date.today)])
+    data_envio = models.DateField(validators=[MaxValueValidator(date.today)])
 
     def __str__(self) -> str:
         return f"{self.atendimento.paciente}, {self.data_cadastro}"
