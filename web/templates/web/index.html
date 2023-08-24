@@ -10,20 +10,65 @@
 
 </head>
 <body>
-    ola!
 
-    <a href="/admin">clique aqui para acessar</a>
+    <!-- Navbar -->
+    {% include 'web/navbar.html' %}
+
+    <!-- Metricas iniciais -->
+    
+    {% include 'web/metricas.html' %}
+
+    <div class="container ">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center" colspan="7">Pacientes cadastrados recentemente</th>
+                    </tr>
+                    
+                    <tr>
+                        <th> Notificacao </th>
+                        <th> Clinica </th>
+                        <th> Cidade </th>
+                        <th> Estado </th>
+                        <th> Tipo de teste </th>
+                        <th> Resultado </th>
+                        <th> Data de notificaco </th>
+                    </tr>
+                </thead>
+            
+                {% for i in lista %}
+                    <tr>
+                        <td>{{ i.id }}</td>
+                        <td>{{ i.atendimento.local.descricao}}</td>
+                        <td>{{ i.atendimento.local.cidade.descricao }}</td>
+                        <td>{{ i.atendimento.local.cidade.estado }}</td>
+                        <td>{{ i.tipo_teste }}</td>
+                        <td>{{ i.resultado }}</td>
+                        <td>{{ i.data_notificacao }}</td>
+                    </tr>
+                
+                {% empty %}
+                    <tr>
+                        <td colspan="3">Nenhuma pessoa registrada</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div> 
+        
+        {% if lista.count > 0 %}
+            {% for i in lista %}
+                
+            {% endfor %}
+            <p> Quantidade de notificações: {{lista.count}}</p>
+    
+        {% else %}
+            <p> Não existe notificações salvas.</p>
+        {% endif %}
+    </div>
+
 
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.bundle.min.js'%}" ></script>
-
-    {% if lista.count > 0 %}
-        {% for i in lista %}
-            <p>{{i}}</p>
-        {% endfor %}
-        <p> Quantidade de notificações: {{lista.count}}</p>
-    {% else %}
-        <p> Não existe notificações salvas.</p>
-    {% endif %}
 </body>
 </html>

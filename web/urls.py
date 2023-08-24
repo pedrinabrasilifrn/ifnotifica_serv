@@ -4,6 +4,6 @@ from web import views
 
 app_name="web"
 urlpatterns=[
-  path('', views.index),
- 
+    path('', views.index),
+    
 ]

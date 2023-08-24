@@ -1,0 +1,59 @@
+{%load static %}
+
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="card text-bg-danger mb-3 p-3">
+                <div class="card-body">
+                    <h4 class="card-title">Casos</h4>
+                    <h2 class="card-text"> {{lista.count}} </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+            <div class="card text-bg-warning text-light mb-3 p-3">
+                <div class="card-body">
+                    <h4 class="card-title">Casos suspeitos</h4>
+                    <h2 class="card-text"> {{lista.count}} </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+            <div class="card text-bg-success mb-3 p-3">
+                <div class="card-body">
+                    <h4 class="card-title">Casos descartados</h4>
+                    <h2 class="card-text"> {{lista.count}} </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+            <div class="card text-bg-info text-light mb-3 p-3">
+                <div class="card-body">
+                    <h4 class="card-title">Curados</h4>
+                    <h2 class="card-text"> {{lista.count}} </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+            <div class="card text-bg-danger mb-3 p-3">
+                <div class="card-body">
+                    <h4 class="card-title">Zona de perigo</h4>
+                    <h2 class="card-text"> {{lista.count}} </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+            <div class="card text-bg-light mb-3 p-3">
+                <div class="card-body">
+                    <h4 class="card-title">Ultima atualizacao</h4>
+                    <h2 class="card-text"> 2h </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
