@@ -68,14 +68,23 @@ class Cidade(models.Model):
     descricao = models.CharField(verbose_name="Cidade", blank=False, null=False, max_length=255, validators=[MinLengthValidator(3)])
     estado = models.CharField(verbose_name="Estado", blank=False, null=False, choices= Estado.choices, max_length=255)
 
+    def __str__(self):
+        return f"{self.descricao}, {self.estado}"
+
 class Bairro(models.Model):
     descricao = models.CharField(verbose_name="Bairro", blank=False, null=False, max_length=255, validators=[MinLengthValidator(3)])
     cidade = models.ForeignKey(Cidade, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"{self.descricao}, {self.cidade}"
     
 
 class UnidadeBasica(models.Model):
     descricao = models.CharField(verbose_name="Unidade basica", blank=False, null=False, max_length=128, validators=[MinLengthValidator(3)])
     cidade = models.ForeignKey(Cidade, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"{self.descricao}, {self.cidade}"
 
 
 class Paciente(models.Model):
@@ -98,11 +107,17 @@ class Paciente(models.Model):
     email = models.EmailField(max_length=128, blank=False, null=False)
     data_cadastro = models.DateField(blank=False, null=False, default=date.today, validators=[MaxValueValidator(date.today)])
 
+    def __str__(self) -> str:
+        return f"{self.cpf}, {self.nome}"
+
 class Atendimento(models.Model):
     estrategia_atendimento = models.CharField(max_length=128, choices=EstrategiaAtendimento.choices)
     local = models.ForeignKey(UnidadeBasica, on_delete=models.PROTECT)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     data_cadastro = models.DateField(blank=False, null=False, default=date.today, validators=[MaxValueValidator(date.today)])
+
+    def __str__(self) -> str:
+        return f"{self.paciente}, {self.local}, {self.data_cadastro}"
     
 class Notificacao(models.Model):
     data_notificacao = models.DateField(default=date.today)
@@ -115,3 +130,6 @@ class Notificacao(models.Model):
     atendimento = models.ForeignKey(Atendimento, on_delete=models.CASCADE)
     data_cadastro = models.DateField(default=date.today, validators=[MaxValueValidator(date.today)])
     data_envio = models.DateField(validators=[MaxValueValidator(date.today)])
+
+    def __str__(self) -> str:
+        return f"{self.atendimento.paciente}, {self.data_cadastro}"

@@ -23,11 +23,12 @@
             <table class="table table-striped">
                 <thead class="table-dark">
                     <tr>
-                        <th class="text-center" colspan="7">Pacientes cadastrados recentemente</th>
+                        <th class="text-center" colspan="8">Pacientes cadastrados recentemente</th>
                     </tr>
                     
                     <tr>
                         <th> Notificacao </th>
+                        <th> Sexo </th>
                         <th> Clinica </th>
                         <th> Cidade </th>
                         <th> Estado </th>
@@ -40,6 +41,7 @@
                 {% for i in lista %}
                     <tr>
                         <td>{{ i.id }}</td>
+                        <td> {{ i.atendimento.paciente.sexo }} </td>
                         <td>{{ i.atendimento.local.descricao}}</td>
                         <td>{{ i.atendimento.local.cidade.descricao }}</td>
                         <td>{{ i.atendimento.local.cidade.estado }}</td>
