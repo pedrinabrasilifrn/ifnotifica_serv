@@ -64,12 +64,35 @@ class Resultado(models.TextChoices):
     NAO_REAGENTE = "NAO_REAGENTE", "Resultado negativo"
     INDETERMINADO = "INDETERMINADO", "Resultado indeterminado" 
 
+class Sintomas(models.TextChoices):
+    CORIZA = "CORIZA", "Coriza"
+    FEBRE = "FEBRE", "Febre"
+    DOR_DE_CABECA = "DOR_DE_CABECA", "Dor de cabeça"
+    DOR_DE_GARGANTA = "DOR_GARGANTA", "Dor de garganta"
+    DISTURBIOS_GUSTATIVOS = "DISTURBIOS_GUSTATIVOS", "Distúrbios gustativos"
+    DISPNÉIA = "DISPNEIA", "Dispneia"
+    DISTURBIOS_OLFATIVOS = "DISTURBIOS_OLFATIVOS", "Distúrbios olfativos"
+    TOSSE = "TOSSE", "Tosse"
+    OUTROS = "OUTROS", "Outros"
+
+class CondicoesEspeciais(models.TextChoices):
+    DOENCA_RESPIRATORIA = "DOENCA_RESPIRATORIA", "Doenças respiratória crônica"
+    DOENCA_RENAL = "DOENCA_RENAL", "Doenças renal crônica em estagio avançado"
+    DOENCA_CROMOSSOMICA = "DOENCA_CROMOSSOMICA", "Doenças cromossômicas ou estado de fragilidade imunológica"
+    DOENCA_CARDIACA = "DOENCA_CARDIOVASCULAR", "Doença cardíacas crônicas"
+    DOENCA_PUERPERA = "DOENCA_PUERPERA", "Puérpera (até 45 dias do parto)"
+    IMUNOSSUPRESSAO = "IMUNOSSUPRESSAO", "Imunossupressão"
+    DIABETES = "DIABETES", "Diabetes"
+    GESTANTE = "GESTANTE", "Gestante"
+    OBESIDADE = "OBESIDADE", "Obesidade"
+    OUTROS = "OUTROS", "Outros"
+
 class Cidade(models.Model):
     descricao = models.CharField(verbose_name="Cidade", blank=False, null=False, max_length=255, validators=[MinLengthValidator(3)])
     estado = models.CharField(verbose_name="Estado", blank=False, null=False, choices= Estado.choices, max_length=255)
 
     def __str__(self):
-        return f"{self.descricao}, {self.estado}"
+        return f"{self.descricao} - {self.estado}"
 
 class Bairro(models.Model):
     descricao = models.CharField(verbose_name="Bairro", blank=False, null=False, max_length=255, validators=[MinLengthValidator(3)])
@@ -125,8 +148,8 @@ class Notificacao(models.Model):
     estado_teste = models.CharField(max_length=128, blank=False, null=False, choices=EstadoTeste.choices) 
     resultado = models.CharField(max_length=128, blank=False, null=False, choices=Resultado.choices) 
     assintomatico = models.BooleanField(default=False)
-    sintomas = models.CharField(max_length=256)
-    condicoes_especiais = models.CharField(max_length=256)
+    sintomas = models.CharField(max_length=256, blank=True, null=True, choices=Sintomas.choices)
+    condicoes_especiais = models.CharField(max_length=256 , blank=True, null=True, choices=CondicoesEspeciais.choices)
     atendimento = models.ForeignKey(Atendimento, on_delete=models.CASCADE)
     data_cadastro = models.DateField(default=date.today, validators=[MaxValueValidator(date.today)])
     data_envio = models.DateField(validators=[MaxValueValidator(date.today)])

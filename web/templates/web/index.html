@@ -59,16 +59,16 @@
         </div> 
         
         {% if lista.count > 0 %}
-            {% for i in lista %}
-                
-            {% endfor %}
             <p> Quantidade de notificações: {{lista.count}}</p>
+
+            {{figura1|safe}}
     
         {% else %}
             <p> Não existe notificações salvas.</p>
         {% endif %}
     </div>
 
+    {{grafico1|safe}}
 
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.bundle.min.js'%}" ></script>
