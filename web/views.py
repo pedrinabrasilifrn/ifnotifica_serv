@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import Count
 import plotly.express as px
 from web.models import Notificacao, UnidadeBasica 
+import calendar
 
 # Create your views here.
 def index(request):
@@ -12,13 +13,22 @@ def index(request):
     ultima_atualizacao = Notificacao.objects.latest('data_cadastro').data_cadastro
     ubs_mais_visitada = UnidadeBasica.objects.all().annotate(num_atendimentos=Count('atendimento')).order_by('-num_atendimentos')[0]
 
-    figura1 = px.line(
-        x = [notificacao.data_envio for notificacao in notificacoes],
-        # numero de infeccoes por data
-        y = [notificacao.atendimento.paciente.count() for notificacao in notificacoes],
+    numero_de_notificacoes_por_mes = px.bar(
+        x = [calendar.month_name[notificacao.data_envio.month] for notificacao in notificacoes],
+        y = [1 for notificacao in notificacoes],
+        labels= {'x':'Mês', 'y':'Notificações enviadas'},
+        title='Número de notificações por mês'
     )
 
-    grafico1 = figura1.to_html()
+    numero_de_notificacoes_por_sexo = px.bar(
+        x = [notificacao.atendimento.paciente.sexo for notificacao in notificacoes],
+        y = [1 for notificacao in notificacoes],
+        labels= {'x':'Sexo', 'y':'Notificações enviadas'},
+        title='Número de notificações por sexo'
+    )
+
+    grafico1 = numero_de_notificacoes_por_mes.to_html()
+    grafico2 = numero_de_notificacoes_por_sexo.to_html()
 
     context = { 
         'lista' : notificacoes, 
@@ -29,6 +39,7 @@ def index(request):
 
         'ubs_mais_visitada' : ubs_mais_visitada,
         'grafico1' : grafico1,
+        'grafico2' : grafico2,
     }
 
     return render(request, 'web/index.html', context=context)

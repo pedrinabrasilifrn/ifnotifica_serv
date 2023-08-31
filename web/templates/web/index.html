@@ -18,6 +18,19 @@
     
     {% include 'web/metricas.html' %}
 
+    
+    <div class="container-fluid mb-3">
+        <div class="row">
+            <div class="col-sm-6">
+                {{grafico1|safe}}
+            </div>
+
+            <div class="col-sm-6">
+                {{grafico2|safe}}
+            </div>
+        </div>
+    </div>
+
     <div class="container ">
         <div class="table-responsive">
             <table class="table table-striped">
@@ -47,7 +60,7 @@
                         <td>{{ i.atendimento.local.cidade.estado }}</td>
                         <td>{{ i.tipo_teste }}</td>
                         <td>{{ i.resultado }}</td>
-                        <td>{{ i.data_notificacao }}</td>
+                        <td>{{ i.data_envio }}</td>
                     </tr>
                 
                 {% empty %}
@@ -67,8 +80,6 @@
             <p> Não existe notificações salvas.</p>
         {% endif %}
     </div>
-
-    {{grafico1|safe}}
 
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.bundle.min.js'%}" ></script>
