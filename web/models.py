@@ -151,12 +151,10 @@ class Notificacao(models.Model):
     resultado = models.CharField(max_length=128, blank=False, null=False, choices=Resultado.choices) 
     assintomatico = models.BooleanField(default=False)
     sintomas = models.CharField(max_length=256, null=True, choices=Sintomas.choices, default=1)
-    condicoes_especiais = models.CharField(max_length=256 , null=True, choices=CondicoesEspeciais.choices,default=1)
+    condicoes_especiais = models.CharField(max_length=256 , null=True, choices=CondicoesEspeciais.choices, default=1)
     atendimento = models.ForeignKey(Atendimento, on_delete=models.CASCADE)
     data_cadastro = models.DateField(default=date.today, validators=[MaxValueValidator(date.today)])
-    data_envio = models.DateField(validators=[MaxValueValidator(date.today)])
-    
-        
+    data_envio = models.DateField(validators=[MaxValueValidator(date.today)])        
     
     def __str__(self) -> str:
         return f"{self.atendimento.paciente}, {self.data_cadastro}"

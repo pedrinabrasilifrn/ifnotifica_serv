@@ -10,4 +10,13 @@ class NotificacaoForm(forms.ModelForm):
             'condicoes_especiais': forms.CheckboxSelectMultiple,
             'sintomas': forms.CheckboxSelectMultiple,
         }
+
+    def clean_condicoes_especiais(self):
+        data = self.cleaned_data["condicoes_especiais"]
+        return data
+        
+    def clean_sintomas(self):
+        data = self.cleaned_data["sintomas"]
+        return data
+
     
