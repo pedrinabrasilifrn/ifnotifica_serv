@@ -25,9 +25,9 @@ def index(request):
         ultima_atualizacao = Notificacao.objects.latest('data_cadastro').data_cadastro
         
         numero_de_notificacoes_por_mes = px.bar(
-            x = [calendar.month_name[notificacao.data_envio.month] for notificacao in notificacoes],
+            x = [calendar.month_name[notificacao.data_cadastro.month] for notificacao in notificacoes],
             y = [1 for notificacao in notificacoes],
-            labels= {'x':'Mês', 'y':'Notificações enviadas'},
+            labels= {'x':'Mês', 'y':'Notificações cadastradas'},
             title='Número de notificações por mês'
         )
 
@@ -43,6 +43,6 @@ def index(request):
 
         context["grafico1"] =  grafico1
         context["grafico2"] = grafico2
-        context["ultima_atualizacao"] =  ultima_atualizacao,
+        context["ultima_atualizacao"] =  ultima_atualizacao
 
     return render(request, 'web/index.html', context=context)

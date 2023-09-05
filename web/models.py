@@ -94,6 +94,10 @@ class Cidade(models.Model):
 
     def __str__(self):
         return f"{self.descricao} - {self.estado}"
+    
+    class Meta:
+        verbose_name = 'Cidade'
+        verbose_name_plural = 'Cidades'
 
 class Bairro(models.Model):
     descricao = models.CharField(verbose_name="Bairro", blank=False, null=False, max_length=255, validators=[MinLengthValidator(3)])
@@ -102,6 +106,10 @@ class Bairro(models.Model):
     def __str__(self):
         return f"{self.descricao}, {self.cidade}"
     
+    class Meta:
+        verbose_name = 'Bairro'
+        verbose_name_plural = 'Bairros'
+    
 
 class UnidadeBasica(models.Model):
     descricao = models.CharField(verbose_name="Unidade basica", blank=False, null=False, max_length=128, validators=[MinLengthValidator(3)])
@@ -109,11 +117,14 @@ class UnidadeBasica(models.Model):
 
     def __str__(self):
         return f"{self.descricao}, {self.cidade}"
+    
+    class Meta:
+        verbose_name = 'UBS'
+        verbose_name_plural = 'UBS´s'
 
 
 class Paciente(models.Model):
-    id_paciente = models.AutoField(primary_key=True)
-    cpf = models.CharField(max_length=11, blank=False, null=False, validators=[MinLengthValidator(11)])
+    cpf = models.CharField(max_length=11, blank=False, null=False, validators=[MinLengthValidator(11)], unique=True)
     cbo = models.CharField(max_length=15, blank=True, null=False,  validators=[MinLengthValidator(4)])
     nome = models.CharField(max_length=128, blank=False, null=False,  validators=[MinLengthValidator(12)])
     data_nascimento = models.DateField(validators=[MaxValueValidator(date.today)])
@@ -134,6 +145,10 @@ class Paciente(models.Model):
     def __str__(self) -> str:
         return f"{self.cpf}, {self.nome}"
 
+    class Meta:
+        verbose_name = 'Paciente'
+        verbose_name_plural = 'Pacientes'
+
 class Atendimento(models.Model):
     estrategia_atendimento = models.CharField(max_length=128, choices=EstrategiaAtendimento.choices)
     local = models.ForeignKey(UnidadeBasica, on_delete=models.PROTECT)
@@ -142,19 +157,27 @@ class Atendimento(models.Model):
 
     def __str__(self) -> str:
         return f"{self.paciente}, {self.local}, {self.data_cadastro}"
+    
+    class Meta:
+        verbose_name = 'Atendimento'
+        verbose_name_plural = 'Atendimentos'
 
 
 class Notificacao(models.Model):
     data_notificacao = models.DateField(default=date.today)
     tipo_teste = models.CharField(max_length=128, blank=False, null=False, choices=TipoTeste.choices) 
     estado_teste = models.CharField(max_length=128, blank=False, null=False, choices=EstadoTeste.choices) 
-    resultado = models.CharField(max_length=128, blank=False, null=False, choices=Resultado.choices) 
+    resultado = models.CharField(max_length=128, null=True,  blank=True,  choices=Resultado.choices) 
     assintomatico = models.BooleanField(default=False)
     sintomas = MultiSelectField("Sintomas", choices = Sintomas.choices, max_length=500, null=True)
     condicoes_especiais = MultiSelectField("Condições Especiais", choices = CondicoesEspeciais.choices, max_length=500 , null=True)
     atendimento = models.ForeignKey(Atendimento, on_delete=models.CASCADE)
     data_cadastro = models.DateField(default=date.today, validators=[MaxValueValidator(date.today)])
-    data_envio = models.DateField(validators=[MaxValueValidator(date.today)])        
+    data_envio = models.DateField(validators=[MaxValueValidator(date.today)], null=True,   blank=True)        
     
     def __str__(self) -> str:
         return f"{self.atendimento.paciente}, {self.data_cadastro}"
+    
+    class Meta:
+        verbose_name = 'Notificação'
+        verbose_name_plural = 'Notificações'

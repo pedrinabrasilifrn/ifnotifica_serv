@@ -1,60 +1,61 @@
 {%load static %}
 
 <div class="container-fluid ">
-    <div class="row">
-        <div class="col-sm-2">
-            <div class="card text-bg-danger mb-3 p-3">
-                <div class="card-body">
-                    <h4 class="card-title">Casos</h4>
-                    <h2 class="card-text"> {{casos_confirmados}} </h2>
-                </div>
+    <div class="row justify-content-center">
+        
+    
+        <div class="col-sm-1 card text-bg-info text-light m-1">
+            <div class="card-body">
+                <h4 class="card-title">Total</h4>
+                <h2 class="card-text"> {{lista.count}} </h2>
+            </div>
+        </div>
+            
+       
+
+        <div class="col-sm-2 card text-bg-success m-1 ">
+            <div class="card-body">
+                <h4 class="card-title">Negativos</h4>
+                <h2 class="card-text"> {{casos_descartados}} </h2>
             </div>
         </div>
 
-        <div class="col-sm-2">
-            <div class="card text-bg-warning text-light mb-3 p-3">
-                <div class="card-body">
-                    <h4 class="card-title">Casos suspeitos</h4>
-                    <h2 class="card-text"> {{casos_suspeitos}} </h2>
-                </div>
+        
+        <div class="col-sm-2 card text-bg-danger m-1 ">
+            <div class="card-body">
+                <h4 class="card-title">Positivos</h4>
+                <h2 class="card-text"> {{casos_confirmados}} </h2>
             </div>
         </div>
 
-        <div class="col-sm-2">
-            <div class="card text-bg-success mb-3 p-3">
-                <div class="card-body">
-                    <h4 class="card-title">Casos descartados</h4>
-                    <h2 class="card-text"> {{casos_descartados}} </h2>
-                </div>
+        <div class="col-sm-2 card text-bg-warning text-light m-1 ">
+            <div class="card-body">
+                <h4 class="card-title">Indeterminados</h4>
+                <h2 class="card-text"> {{casos_suspeitos}} </h2>
             </div>
         </div>
+    
+    
 
-        <div class="col-sm-2">
-            <div class="card text-bg-info text-light mb-3 p-3">
-                <div class="card-body">
-                    <h4 class="card-title">Casos registrados</h4>
-                    <h2 class="card-text"> {{lista.count}} </h2>
-                </div>
-            </div>
-        </div>
+    
 
-        <div class="col-sm-2">
-            <div class="card text-bg-danger mb-3 p-3">
-                <div class="card-body">
-                    <h4 class="card-title"> UBS mais visitada</h4>
-                    <!--- TODO: UBS mais visitada-->
-                    <h6 class="card-text"> {{ubs_mais_visitada}} </h6>
-                </div>
+    
+        <div class="col-sm-2 card text-bg-dark m-1">
+            <div class="card-body">
+                <h4 class="card-title"> UBS mais visitada</h4>
+                <!--- TODO: UBS mais visitada-->
+                <h6 class="card-text"> {{ubs_mais_visitada}} </h6>
             </div>
         </div>
+        
 
-        <div class="col-sm-2">
-            <div class="card text-bg-light mb-3 p-3">
-                <div class="card-body mb-3">
-                    <h4 class="card-title">Ultima atualizacao</h4>
-                    <h5 class="card-text"> {{ultima_atualizacao}} </h5>
-                </div>
+        
+        <div class="col-sm-2 card text-bg-light m-1">
+            <div class="card-body">
+                <h4 class="card-title">Ultima atualizacao</h4>
+                <h5 class="card-text"> {{ultima_atualizacao | date }} </h5>
             </div>
         </div>
+        
     </div>
 </div>
