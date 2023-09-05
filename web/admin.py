@@ -11,7 +11,15 @@ admin.site.register(UnidadeBasica)
 
 
 
-    
-@admin.register(Notificacao)
+from django import forms
+
 class NotificacaoAdmin(admin.ModelAdmin):
+    list_display = ["id", "data_notificacao", "tipo_teste", "atendimento"]
+    list_display_links = ["id"]
     form = NotificacaoForm
+    
+ 
+admin.site.register(Notificacao, NotificacaoAdmin)
+    
+    
+    

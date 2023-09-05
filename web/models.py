@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator,  MinLengthValidator
 from datetime import date
-from django import forms    
+from multiselectfield import MultiSelectField
 
 class Estado(models.TextChoices):
     AC = "AC", "Acre"
@@ -71,7 +71,7 @@ class Sintomas(models.TextChoices):
     DOR_DE_CABECA = "DOR_DE_CABECA", "Dor de cabeça"
     DOR_DE_GARGANTA = "DOR_GARGANTA", "Dor de garganta"
     DISTURBIOS_GUSTATIVOS = "DISTURBIOS_GUSTATIVOS", "Distúrbios gustativos"
-    DISPNÉIA = "DISPNEIA", "Dispneia"
+    DISPNEIA = "DISPNEIA", "Dispneia"
     DISTURBIOS_OLFATIVOS = "DISTURBIOS_OLFATIVOS", "Distúrbios olfativos"
     TOSSE = "TOSSE", "Tosse"
     OUTROS = "OUTROS", "Outros"
@@ -150,8 +150,8 @@ class Notificacao(models.Model):
     estado_teste = models.CharField(max_length=128, blank=False, null=False, choices=EstadoTeste.choices) 
     resultado = models.CharField(max_length=128, blank=False, null=False, choices=Resultado.choices) 
     assintomatico = models.BooleanField(default=False)
-    sintomas = models.CharField(max_length=256, null=True, choices=Sintomas.choices, default=1)
-    condicoes_especiais = models.CharField(max_length=256 , null=True, choices=CondicoesEspeciais.choices, default=1)
+    sintomas = MultiSelectField("Sintomas", choices = Sintomas.choices, max_length=500, null=True)
+    condicoes_especiais = MultiSelectField("Condições Especiais", choices = CondicoesEspeciais.choices, max_length=500 , null=True)
     atendimento = models.ForeignKey(Atendimento, on_delete=models.CASCADE)
     data_cadastro = models.DateField(default=date.today, validators=[MaxValueValidator(date.today)])
     data_envio = models.DateField(validators=[MaxValueValidator(date.today)])        
