@@ -28,14 +28,14 @@ def index(request):
             x = [calendar.month_name[notificacao.data_cadastro.month] for notificacao in notificacoes],
             y = [1 for notificacao in notificacoes],
             labels= {'x':'Mês', 'y':'Notificações cadastradas'},
-            title='Número de notificações por mês'
+            title='Número de notificações por mês',
         )
 
         numero_de_notificacoes_por_sexo = px.bar(
             x = [notificacao.atendimento.paciente.sexo for notificacao in notificacoes],
             y = [1 for notificacao in notificacoes],
             labels= {'x':'Sexo', 'y':'Notificações enviadas'},
-            title='Número de notificações por sexo'
+            title='Número de notificações por sexo',
         )
 
         grafico1 = numero_de_notificacoes_por_mes.to_html()
