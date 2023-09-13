@@ -20,7 +20,7 @@
 
     
     <div class="container-fluid my-3">
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-sm-6">
                 {{grafico1|safe}}
             </div>
@@ -28,10 +28,21 @@
             <div class="col-sm-6">
                 {{grafico2|safe}}
             </div>
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-12">
+                {{grafico3|safe}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{grafico4|safe}}
+            </div>
         </div>
     </div>
 
-    <div class="container ">
+    <div class="container-fluid ">
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead class="table-dark">
@@ -53,7 +64,7 @@
             
                 {% for i in lista %}
                     <tr>
-                        <td>{{ i.id }}</td>
+                        <td>{{ forloop.counter }}</td>
                         <td> {{ i.atendimento.paciente.sexo }} </td>
                         <td>{{ i.atendimento.local.descricao}}</td>
                         <td>{{ i.atendimento.local.cidade.descricao }}</td>
