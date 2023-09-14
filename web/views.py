@@ -2,13 +2,17 @@ from django.shortcuts import render
 from django.db.models import Count
 import plotly.express as px
 import plotly.graph_objects as go
-from web.models import Notificacao, UnidadeBasica 
+from web.models import Atendimento, Notificacao, Paciente, Resultado, Sexo, UnidadeBasica 
 import calendar
+import pandas as pd
 from . import plotly_app
-
+from django.db.models import OuterRef, Subquery
 # Create your views here.
 def index(request):
-    notificacoes = Notificacao.objects.all()
+    notificacoes = Notificacao.objects.all().select_related("atendimento", "atendimento__paciente")
+    for n in notificacoes:
+        print(n.atendimento.paciente.sexo)
+
     casos_suspeitos = Notificacao.objects.filter(resultado='INDETERMINADO').count()
     casos_confirmados = Notificacao.objects.filter(resultado='REAGENTE').count()
     casos_descartados = Notificacao.objects.filter(resultado='NAO_REAGENTE').count()
@@ -24,30 +28,71 @@ def index(request):
     }
 
     if len(notificacoes.values_list()) > 0:
+        df_sexo  = pd.DataFrame(columns=[])
+        sexos = [n.get_sexo() for n in notificacoes]
+        sexos = [s[0] for s in Sexo.choices]
+        resultados = [r[0] for r in Resultado.choices]
+        resultados.append("N/A")
+        df_sexo["resultado"] = resultados
+        for s in sexos:
+            df_sexo[s] = [notificacoes.filter(atendimento__paciente__sexo = s).filter(resultado = resultados[0]).count(),
+                        notificacoes.filter(atendimento__paciente__sexo = s).filter(resultado = resultados[1]).count(),
+                        notificacoes.filter(atendimento__paciente__sexo = s).filter(resultado = resultados[2]).count(),
+                        notificacoes.filter(atendimento__paciente__sexo = s).filter(resultado = None).count()]
+      
+        df_mes  = pd.DataFrame(columns=[])
+        lista = [calendar.month_name[n.data_cadastro.month] for n in notificacoes]
+        print(lista)
+        meses = list(set(lista))
+        
+        resultados = [r[0] for r in Resultado.choices]
+        resultados.append("N/A")
+        df_mes["resultado"] = resultados
+        for m in meses:
+            df_mes[m] = [notificacoes.filter(atendimento__paciente__sexo = s).filter(resultado = resultados[0]).count(),
+                        notificacoes.filter(atendimento__paciente__sexo = s).filter(resultado = resultados[1]).count(),
+                        notificacoes.filter(atendimento__paciente__sexo = s).filter(resultado = resultados[2]).count(),
+                        notificacoes.filter(atendimento__paciente__sexo = s).filter(resultado = None).count()]
+      
         ultima_atualizacao = Notificacao.objects.latest('data_cadastro').data_cadastro
         
-        numero_de_notificacoes_por_mes = px.bar(
-            x = [calendar.month_name[notificacao.data_cadastro.month] for notificacao in notificacoes],
-            y = [1 for notificacao in notificacoes],
+        numero_de_notificacoes_por_mes = px.histogram(df_mes,
+            x = meses,
+            y = resultados,
             labels = {'x':'Mês', 'y':'Notificações cadastradas'},
-            color= [notificacao.resultado for notificacao in notificacoes],
             title ='Número de notificações por mês',
         )
 
-        numero_de_notificacoes_por_sexo = px.bar(
-            x = [notificacao.atendimento.paciente.sexo for notificacao in notificacoes],
-            labels = {'x':'Sexo', 'y':'Notificações enviadas'},
-            color= [notificacao.atendimento.paciente.sexo for notificacao in notificacoes],
+        numero_de_notificacoes_por_mes.update_layout(
+            xaxis=dict(title='Valores'),
+            yaxis=dict(title='Resultados'),
+        )
+        
+        numero_de_notificacoes_por_sexo = px.bar(df_sexo,
+            x = sexos,
+            y = resultados,
+            labels = {'x':'reultado', 'y':'Número de Notificações'},            
             title ='Número de notificações por sexo',
+            text=resultados
+        )
+        df = pd.DataFrame(notificacoes.values())
+        df["sexo"] = [n.atendimento.paciente.sexo for n in notificacoes]
+        numero_de_notificacoes_por_sexo = px.bar(df,
+            x = "sexo",
+            y =  "resultado",
+            labels = {'x':'reultado', 'y':'Número de Notificações'},            
+            title ='Número de notificações por sexo'
         )
 
         numero_de_notificacos_positivas_por_estado = px.bar(
-            x = [notificacao.atendimento.paciente.cidade.estado for notificacao in notificacoes if notificacao.resultado == 'REAGENTE'],
-            y = [1 for notificacao in notificacoes if notificacao.resultado == 'REAGENTE'],
+            x = [notificacao.atendimento.paciente.cidade.estado for notificacao in notificacoes],
+            y = [1 for notificacao in notificacoes],
             labels = {'x':'Estado', 'y':'Notificações positivas'},
-            color = [notificacao.atendimento.paciente.cidade.estado for notificacao in notificacoes if notificacao.resultado == 'REAGENTE'],
+            #color = [notificacao.atendimento.paciente.cidade.estado for notificacao in notificacoes if notificacao.resultado == 'REAGENTE'],
+            color= [notificacao.resultado for notificacao in notificacoes],
             title ='Número de notificações positivas por estado',
         )
+        
 
         # TODO: ajeitar histograma
         numero_de_notificacoes_por_idade_e_sexo = px.histogram(
