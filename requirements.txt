@@ -3,6 +3,7 @@ Django==4.1.4
 django-cors-headers==4.2.0
 django-multiselectfield==0.1.12
 djangorestframework==3.14.0
+django-plotly-dash==2.2.2
 numpy==1.25.2
 packaging==23.1
 pandas==2.0.3

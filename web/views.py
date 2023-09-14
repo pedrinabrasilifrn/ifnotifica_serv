@@ -4,6 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from web.models import Notificacao, UnidadeBasica 
 import calendar
+from . import plotly_app
 
 # Create your views here.
 def index(request):

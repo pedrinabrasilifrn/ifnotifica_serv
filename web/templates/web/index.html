@@ -1,4 +1,6 @@
 {%load static %}
+{%load plotly_dash%}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,14 +37,10 @@
                 {{grafico3|safe}}
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-6">
-                {{grafico4|safe}}
-            </div>
-        </div>
+        {%plotly_app name="SimpleExample"%}
     </div>
 
-    <div class="container-fluid ">
+    <div class="container-fluid mt-5">
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead class="table-dark">
