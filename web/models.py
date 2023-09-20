@@ -175,10 +175,6 @@ class Notificacao(models.Model):
     data_cadastro = models.DateField(default=date.today, validators=[MaxValueValidator(date.today)])
     data_envio = models.DateField(validators=[MaxValueValidator(date.today)], null=True,   blank=True)        
     
-
-    def get_sexo(self):
-        return self.atendimento.paciente.sexo
-
     def __str__(self) -> str:
         return f"{self.atendimento.paciente}, {self.data_cadastro}"
     
