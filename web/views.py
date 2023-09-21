@@ -51,29 +51,6 @@ def index(request):
                         notificacoes.filter(atendimento__paciente__sexo = s).filter(resultado = resultados[2]).count(),
                         notificacoes.filter(atendimento__paciente__sexo = s).filter(resultado = None).count()]
 
-        # create a dataframe with all the data that is used on the table created at the index.html called "tabela1"
-        # read the html correctly
-        df_tabela1 = pd.DataFrame(columns=['notificacao', 'sexo', 'clinica', 'cidade', 'estado', 'tipo de teste', 'resultado', 'data de notificação'])
-
-        # collect all the data for this dataframe that is referred in the columns above
-        for n in notificacoes:
-            notificacao_atual = n.id
-            sexo = n.atendimento.paciente.sexo
-            clinica = n.atendimento.local.descricao
-            cidade = n.atendimento.local.cidade.descricao
-            estado = n.atendimento.local.cidade.estado
-            tipo_de_teste = n.tipo_teste
-            resultado = n.resultado
-            data_de_notificacao = n.data_envio
-
-            # create a dictionary with the data collected above
-            data = {'notificacao': notificacao_atual, 'sexo': sexo, 'clinica': clinica, 'cidade': cidade, 'estado': estado, 'tipo de teste': tipo_de_teste, 'resultado': resultado, 'data de notificação': data_de_notificacao}
-
-            # append the dictionary to the dataframe
-            df_tabela1.loc[len(df_tabela1)] = data
-
-        print(df_tabela1)
-
         ultima_atualizacao = Notificacao.objects.latest('data_cadastro').data_cadastro
         
         numero_de_notificacoes_por_mes = px.bar(
@@ -120,3 +97,6 @@ def index(request):
         context["ultima_atualizacao"] =  ultima_atualizacao
 
     return render(request, 'web/index.html', context=context)
+
+def sobre(request):
+    return render(request, 'web/sobre.html')

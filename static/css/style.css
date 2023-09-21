@@ -1,3 +1,7 @@
 body {
-    background-color: #EFF2F9 !important;
+  background-color: #eff2f9 !important;
+}
+
+.col-sm-x {
+  width: 12%;
 }

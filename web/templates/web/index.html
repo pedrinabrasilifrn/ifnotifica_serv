@@ -2,46 +2,60 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" />
-        <link href="{% static 'css/style.css'%}" rel="stylesheet" />
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" />
+    <link href="{% static 'css/style.css'%}" rel="stylesheet" />
+</head>
+<body>
     <!-- Navbar -->
-        {% include 'web/navbar.html' %}
+    {% include 'web/navbar.html' %}
 
-        <!-- Metricas iniciais -->
+    <!-- Metricas iniciais -->
 
-        {% include 'web/metricas.html' %}
+    {% include 'web/metricas.html' %}
 
-        <div class="container-fluid my-3">
-            <div class="row mb-3">
-                <div class="col-sm-6">{{grafico1|safe}}</div>
+    <div id="plotly" class="container-fluid my-3">
+        {%plotly_app name="tabela_notificacoes"%}
+    </div>
 
-                <div class="col-sm-6">{{grafico2|safe}}</div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-sm-12">{{grafico3|safe}}</div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-sm-12">{{grafico4|safe}}</div>
-            </div>
+    <div class="container-fluid my-3">
+        <div class="row mb-3">
+            <div class="col-sm-6">{{grafico1|safe}}</div>
+
+            <div class="col-sm-6">{{grafico2|safe}}</div>
         </div>
-        <div id="plotly" class="container-fluid my-3">
-            {%plotly_app name="tabela_notificacoes"%}
+        <div class="row mb-3">
+            <div class="col-sm-12">{{grafico3|safe}}</div>
         </div>
+        <div class="row mb-3">
+            <div class="col-sm-12">{{grafico4|safe}}</div>
+        </div>
+    </div>
 
-        <script src="{% static 'js/jquery.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap.bundle.min.js'%}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js'%}"></script>
 
-        <script>
-            $(document).ready(function () {
-                $("#plotly div").css("overflow-x", "scroll !important");
-                $("#plotly div").css("min-height", "270px");
+    <script>
+        $(document).ready(function () {
+            $("#plotly div").css("overflow-x", "scroll !important");
+            $("#plotly div").css("min-height", "270px");
+
+            if (window.location.pathname === '/') {
+                $('.dash-link').attr('href', '#');
+            }
+
+            $(window).resize(function() {
+                if ($(window).width() > 992) {
+                    $('#nav-links').addClass('justify-content-end');
+                }
+                else {
+                    $('#nav-links').removeClass('justify-content-end');
+                }
             });
-        </script>
-    </body>
+        });
+    </script>
+</body>
 </html>

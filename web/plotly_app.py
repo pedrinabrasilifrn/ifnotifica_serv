@@ -39,7 +39,7 @@ app.layout = html.Div([
         selected_rows=[],
         page_action="native",
         page_current= 0,
-        page_size= 5,
+        page_size= 10,
         style_table={
             'width': '100%',
             'margin': 'auto',
