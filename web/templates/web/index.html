@@ -1,101 +1,47 @@
-{%load static %}
-{%load plotly_dash%}
+{%load static %} {%load plotly_dash%}
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet"/>
-    <link href="{% static 'css/style.css'%}" rel="stylesheet"/>
-
-</head>
-<body>
-
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" />
+        <link href="{% static 'css/style.css'%}" rel="stylesheet" />
+    </head>
+    <body>
     <!-- Navbar -->
-    {% include 'web/navbar.html' %}
+        {% include 'web/navbar.html' %}
 
-    <!-- Metricas iniciais -->
-    
-    {% include 'web/metricas.html' %}
+        <!-- Metricas iniciais -->
 
-    
-    <div class="container-fluid my-3">
-        <div class="row mb-3">
-            <div class="col-sm-6">
-                {{grafico1|safe}}
+        {% include 'web/metricas.html' %}
+
+        <div class="container-fluid my-3">
+            <div class="row mb-3">
+                <div class="col-sm-6">{{grafico1|safe}}</div>
+
+                <div class="col-sm-6">{{grafico2|safe}}</div>
             </div>
-
-            <div class="col-sm-6">
-                {{grafico2|safe}}
+            <div class="row mb-3">
+                <div class="col-sm-12">{{grafico3|safe}}</div>
             </div>
-
-        </div>
-        <div class="row mb-3">
-            <div class="col-sm-12">
-                {{grafico3|safe}}
+            <div class="row mb-3">
+                <div class="col-sm-12">{{grafico4|safe}}</div>
             </div>
         </div>
-        <div class="row mb-3">
-            <div class="col-sm-12">
-                {{grafico4|safe}}
-            </div>
+        <div id="plotly" class="container-fluid my-3">
+            {%plotly_app name="tabela_notificacoes"%}
         </div>
-        {%plotly_app name="SimpleExample"%}
-    </div>
 
-    <div class="container-fluid mt-5">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th class="text-center" colspan="8">Pacientes cadastrados recentemente</th>
-                    </tr>
-                    
-                    <tr>
-                        <th> Notificacao </th>
-                        <th> Sexo </th>
-                        <th> Clinica </th>
-                        <th> Cidade </th>
-                        <th> Estado </th>
-                        <th> Tipo de teste </th>
-                        <th> Resultado </th>
-                        <th> Data de notificaco </th>
-                    </tr>
-                </thead>
-            
-                {% for i in lista %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td> {{ i.atendimento.paciente.sexo }} </td>
-                        <td>{{ i.atendimento.local.descricao}}</td>
-                        <td>{{ i.atendimento.local.cidade.descricao }}</td>
-                        <td>{{ i.atendimento.local.cidade.estado }}</td>
-                        <td>{{ i.tipo_teste }}</td>
-                        <td>{{ i.resultado }}</td>
-                        <td>{{ i.data_envio }}</td>
-                    </tr>
-                
-                {% empty %}
-                    <tr>
-                        <td colspan="3">Nenhuma pessoa registrada</td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div> 
-        
-        {% if lista.count > 0 %}
-            <p> Quantidade de notificações: {{lista.count}}</p>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.bundle.min.js'%}"></script>
 
-            {{figura1|safe}}
-    
-        {% else %}
-            <p> Não existe notificações salvas.</p>
-        {% endif %}
-    </div>
-
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.bundle.min.js'%}" ></script>
-</body>
+        <script>
+            $(document).ready(function () {
+                $("#plotly div").css("overflow-x", "scroll !important");
+                $("#plotly div").css("min-height", "270px");
+            });
+        </script>
+    </body>
 </html>
