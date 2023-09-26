@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-z%iiq3fo=5pc3fdl2(pxicthl1vllv)&ovw+*#^76k9@gw=l0r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["lausana.ifrn.edu.br", "localhost"]
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'whitenoise.runserver_nostatic',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
     'rest_framework',
     'multiselectfield',
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
@@ -128,15 +130,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 import os
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [ os.path.join (BASE_DIR, "static") ]
-
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-MEDIA_URL = '/media/'
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'staticfiles'),)
+STATIC_ROOT = "/home/pedrina/ifnotifica_serv/ifnotifica/static/" #os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/ifnotifica/static/'
+
+#STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
+#)
+
+#STATIC_ROOT = "static/")
+
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL = "/ifnotifica/media/"
+MEDIA_ROOT = "/home/pedrina/ifnotifica_serv/ifnotifica/media"

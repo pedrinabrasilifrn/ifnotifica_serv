@@ -43,3 +43,7 @@ admin.site.register(Notificacao, NotificacaoAdmin)
     
     
     
+admin.site.site_header = "Painel de Controle"
+admin.site.index_title = "IFNotifica"
+admin.site.site_title = "Web"
+admin.site.site_url = "/ifnotifica/"

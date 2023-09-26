@@ -20,9 +20,9 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
-    path('django_plotly_dash/', include('django_plotly_dash.urls')),
-    path('', include('web.urls')),
+    path('ifnotifica/admin/', admin.site.urls),
+    path('ifnotifica/api/', include('api.urls')),
+    path('ifnotifica/django_plotly_dash/', include('django_plotly_dash.urls')),
+    path('ifnotifica/', include('web.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
