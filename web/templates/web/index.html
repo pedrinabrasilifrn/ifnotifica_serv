@@ -35,17 +35,13 @@
         </div>
     </div>
 
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.bundle.min.js'%}"></script>
+    <!-- Footer -->
+    {% include 'web/footer.html' %}
 
     <script>
         $(document).ready(function () {
             $("#plotly div").css("overflow-x", "scroll !important");
             $("#plotly div").css("min-height", "270px");
-
-            if (window.location.pathname === '/') {
-                $('.dash-link').attr('href', '#');
-            }
 
             $(window).resize(function() {
                 if ($(window).width() > 992) {
