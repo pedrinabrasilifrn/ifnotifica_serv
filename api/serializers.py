@@ -18,4 +18,4 @@ class AtendimentoSerializer(serializers.ModelSerializer):
 class NotificacaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notificacao
-        fields = ['data_notificacao', 'tipo_teste', 'estado_teste', 'assintomatico', 'sintomas', 'condicoes_especiais', 'data_cadastro', 'data_envio', 'atendimento']
+        fields = ['data_notificacao', 'tipo_teste', 'estado_teste', 'resultado','assintomatico', 'sintomas', 'condicoes_especiais', 'data_cadastro', 'data_envio', 'atendimento']
