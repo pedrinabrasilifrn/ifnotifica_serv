@@ -5,3 +5,9 @@ body {
 .col-sm-x {
   width: 12%;
 }
+
+.feature-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 0.75rem;
+}  
