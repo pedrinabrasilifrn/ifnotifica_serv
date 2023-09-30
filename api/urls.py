@@ -13,4 +13,6 @@ router.register(r'notificacoes', NotificacaoViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('login', autenticar, name="login"),
+    path('notificar', receber_notificacao, name="notificar")
 ]
