@@ -164,16 +164,16 @@ class Atendimento(models.Model):
 
 
 class Notificacao(models.Model):
-    data_notificacao = models.DateField(default=date.today)
+    data_notificacao = models.DateField(default=date.today, validators=[MaxValueValidator(date.today)], null=False, blank=False)
     tipo_teste = models.CharField(max_length=128, blank=False, null=False, choices=TipoTeste.choices) 
     estado_teste = models.CharField(max_length=128, blank=False, null=False, choices=EstadoTeste.choices) 
     resultado = models.CharField(max_length=128, null=False,  blank=False,  choices=Resultado.choices) 
     assintomatico = models.BooleanField(default=False)
     sintomas = MultiSelectField("Sintomas", choices = Sintomas.choices, max_length=500, null=True)
     condicoes_especiais = MultiSelectField("Condições Especiais", choices = CondicoesEspeciais.choices, max_length=500 , null=True)
-    atendimento = models.ForeignKey(Atendimento, on_delete=models.CASCADE)
-    data_cadastro = models.DateField(default=date.today, validators=[MaxValueValidator(date.today)])
-    data_envio = models.DateField(validators=[MaxValueValidator(date.today)], null=True,   blank=True)        
+    atendimento = models.ForeignKey(Atendimento, on_delete=models.CASCADE, blank=False, null=False)
+    data_cadastro = models.DateField(default=date.today, validators=[MaxValueValidator(date.today)], null=False, blank=False)
+    data_envio = models.DateField(validators=[MaxValueValidator(date.today)], null=False, blank=False)        
     
     def __str__(self) -> str:
         return f"{self.atendimento.paciente}, {self.data_cadastro}"
