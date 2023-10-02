@@ -45,12 +45,34 @@
             $("#plotly div").css("overflow-x", "scroll !important");
             $("#plotly div").css("min-height", "270px");
 
-            $(window).resize(function() {
+            if ($("#nav-links").hasClass("justify-content-end")) {
+                $(".navbar-toggler").click(function () {
+                    $("#nav-links").removeClass("justify-content-end");
+                    $("#nav-links").addClass("justify-content-start");
+                });
+            }
+
+            if ($(window).width() > 992) {
+                $("#notificacoes_totais").removeClass("col-sm-2");
+                $("#notificacoes_totais").addClass("col-sm-x");
+            }
+
+            if ($(window).width() < 992) {
+                $("#notificacoes_totais").removeClass("col-sm-x");
+                $("#notificacoes_totais").addClass("col-sm-2");
+            }
+
+            // verificar sempre que o tamanho de tela mudar
+            $(window).resize(function () {
                 if ($(window).width() > 992) {
+                    $('#nav-links').removeClass('justify-content-start');                 
                     $('#nav-links').addClass('justify-content-end');
+                    $("#notificacoes_totais").removeClass("col-sm-2");
+                    $("#notificacoes_totais").addClass("col-sm-x");
                 }
-                else {
-                    $('#nav-links').removeClass('justify-content-end');
+                if ($(window).width() < 992) {
+                    $("#notificacoes_totais").removeClass("col-sm-x");
+                    $("#notificacoes_totais").addClass("col-sm-2");
                 }
             });
         });
