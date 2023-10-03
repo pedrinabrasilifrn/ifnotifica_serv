@@ -58,14 +58,15 @@ def index(request):
             y = [1 for notificacao in notificacoes],
             labels = {'x':'Mês', 'y':'Notificações cadastradas'},
             color= [notificacao.resultado for notificacao in notificacoes],
-            title ='Número de notificações por mês',
+            title ='Notificações por mês',
         )
 
         numero_de_notificacoes_por_sexo = px.bar(
             x = [notificacao.atendimento.paciente.sexo for notificacao in notificacoes],
+            y = [1 for notificacao in notificacoes],
             labels = {'x':'Sexo', 'y':'Notificações enviadas'},
             color= [notificacao.atendimento.paciente.sexo for notificacao in notificacoes],
-            title ='Número de notificações por sexo',
+            title ='Notificações por sexo',
         )
 
         numero_de_notificacos_positivas_por_estado = px.bar(
@@ -73,22 +74,21 @@ def index(request):
             y = [1 for notificacao in notificacoes if notificacao.resultado == 'REAGENTE'],
             labels = {'x':'Estado', 'y':'Notificações positivas'},
             color = [notificacao.atendimento.paciente.cidade.estado for notificacao in notificacoes if notificacao.resultado == 'REAGENTE'],
-            title ='Número de notificações positivas por estado',
+            title ='Notificações positivas por estado',
         )
 
-        # TODO: ajeitar histograma
-        numero_de_notificacoes_por_idade_e_sexo = px.histogram(
-            # TODO: Calcular a idade do paciente
-            y = [notificacao.atendimento.paciente.sexo for notificacao in notificacoes],
-            labels = {'x':'Idade', 'y':'Notificações enviadas'},
-            color = [notificacao.atendimento.paciente.sexo for notificacao in notificacoes],
-            title ='Número de notificações por idade e sexo',
+        numero_de_notificacoes_assintomaticas_enviadas = px.bar(
+            x = [notificacao.atendimento.paciente.sexo for notificacao in notificacoes if notificacao.assintomatico == True],
+            y = [1 for notificacao in notificacoes if notificacao.assintomatico == True],
+            labels = {'x':'sexo', 'y':'Notificações enviadas'},
+            color = [notificacao.atendimento.paciente.sexo for notificacao in notificacoes if notificacao.assintomatico == True],
+            title ='Notificações assintomaticas por sexo',
         )
 
         grafico1 = numero_de_notificacoes_por_mes.to_html()
         grafico2 = numero_de_notificacoes_por_sexo.to_html()
         grafico3 = numero_de_notificacos_positivas_por_estado.to_html()
-        grafico4 = numero_de_notificacoes_por_idade_e_sexo.to_html()
+        grafico4 = numero_de_notificacoes_assintomaticas_enviadas.to_html()
 
         context["grafico1"] =  grafico1
         context["grafico2"] = grafico2

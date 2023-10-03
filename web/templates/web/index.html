@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" />
     <link href="{% static 'css/style.css'%}" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="{% static 'img/logo.png' %}">
+    <title>IF-Notifica</title>
 </head>
 <body>
     <!-- Navbar -->
@@ -35,24 +37,42 @@
         </div>
     </div>
 
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.bundle.min.js'%}"></script>
+    <!-- Footer -->
+    {% include 'web/footer.html' %}
 
     <script>
         $(document).ready(function () {
             $("#plotly div").css("overflow-x", "scroll !important");
             $("#plotly div").css("min-height", "270px");
 
-            if (window.location.pathname === '/') {
-                $('.dash-link').attr('href', '#');
+            if ($("#nav-links").hasClass("justify-content-end")) {
+                $(".navbar-toggler").click(function () {
+                    $("#nav-links").removeClass("justify-content-end");
+                    $("#nav-links").addClass("justify-content-start");
+                });
             }
 
-            $(window).resize(function() {
+            if ($(window).width() > 992) {
+                $("#notificacoes_totais").removeClass("col-sm-2");
+                $("#notificacoes_totais").addClass("col-sm-x");
+            }
+
+            if ($(window).width() < 992) {
+                $("#notificacoes_totais").removeClass("col-sm-x");
+                $("#notificacoes_totais").addClass("col-sm-2");
+            }
+
+            // verificar sempre que o tamanho de tela mudar
+            $(window).resize(function () {
                 if ($(window).width() > 992) {
+                    $('#nav-links').removeClass('justify-content-start');                 
                     $('#nav-links').addClass('justify-content-end');
+                    $("#notificacoes_totais").removeClass("col-sm-2");
+                    $("#notificacoes_totais").addClass("col-sm-x");
                 }
-                else {
-                    $('#nav-links').removeClass('justify-content-end');
+                if ($(window).width() < 992) {
+                    $("#notificacoes_totais").removeClass("col-sm-x");
+                    $("#notificacoes_totais").addClass("col-sm-2");
                 }
             });
         });
